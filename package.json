@@ -38,6 +38,7 @@
     "core-js": "^2.5.4",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
+    "maskdata": "^1.1.6",
     "mongoose": "^5.13.3",
     "mongoose-unique-validator": "^2.0.3",
     "multer": "^1.4.2",
