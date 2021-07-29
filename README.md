@@ -10,15 +10,3 @@ Sur Windows, ces installations nécessitent d'utiliser PowerShell en tant qu'adm
 ## Development server
 
 Démarrer ng serve pour avoir accès au serveur de développement. Rendez-vous sur http://localhost:4200/. L'application va se recharger automatiquement si vous modifiez un fichier source.
-
-
-
-Installer Express avec la commande : npm install --save express
-
-Installer le package mongoose : npm install --save mongoose
-
-npm install --save mongoose-unique-validator
-
-npm install --save bcrypt
-
-npm install --save jsonwebtoken
