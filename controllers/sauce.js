@@ -52,13 +52,13 @@ exports.getAllSauces = (req, res, next) => {
 
 exports.likeOneSauce = (req, res, next) => {
     let clicLike = req.body.like;
-    console.log(clicLike);
-    let userId = req.params.id;
+    let sauceId = req.params.id;
+    let userId = req.body.userId;
     if (clicLike === -1) {
-        Sauce.findOne({ _id: userId })
-            .then((sauce) => {
+        Sauce.findOne({ _id: sauceId })
+            .then(sauce => {
                 if (sauce.usersLiked.includes(userId)) {
-                    Sauce.updateOne({ _id: userId }, { 
+                    Sauce.updateOne({ _id: sauceId }, { 
                         $inc: { dislikes: 1 },
                         $inc: { likes: -1 },
                         $push: { usersDisliked: userId },
@@ -69,7 +69,7 @@ exports.likeOneSauce = (req, res, next) => {
                 } else if (sauce.usersDisliked.includes(userId)) {
                     console.log('vous avez déjà disliké');
                 } else {
-                    Sauce.updateOne({ _id: userId }, { 
+                    Sauce.updateOne({ _id: sauceId }, { 
                         $inc: { dislikes: 1 },
                         $push: { usersDisliked: userId }
                     })
@@ -79,17 +79,17 @@ exports.likeOneSauce = (req, res, next) => {
             })
             .catch(error => res.status(404).json({ error }));
     } else if (clicLike === 0) {
-        Sauce.findOne({ _id: userId })
-            .then((sauce) => {
+        Sauce.findOne({ _id: sauceId })
+            .then(sauce => {
                 if (sauce.usersLiked.includes(userId)) {
-                    Sauce.updateOne({ _id: userId }, { 
+                    Sauce.updateOne({ _id: sauceId }, { 
                         $inc: { likes: -1 },
                         $pull: { usersLiked: userId }
                     })
                         .then(() => res.status(200).json({ message: 'Sauce likée' }))
                         .catch(error => res.status(400).json({ error }));
                 } else if (sauce.usersDisliked.includes(userId)) {
-                    Sauce.updateOne({ _id: userId }, { 
+                    Sauce.updateOne({ _id: sauceId }, { 
                         $inc: { dislikes: -1 },
                         $pull: { usersDisliked: userId }
                     })
@@ -98,13 +98,13 @@ exports.likeOneSauce = (req, res, next) => {
                 }
             })
             .catch(error => res.status(404).json({ error }));
-    } else if (clicLike === 1) {
-        Sauce.findOne({ _id: userId })
-            .then((sauce) => {
+    } else {
+        Sauce.findOne({ _id: sauceId })
+            .then(sauce => {
                 if (sauce.usersLiked.includes(userId)) {
                     console.log('vous avez déjà liké cette sauce');
                 } else if (sauce.usersDisliked.includes(userId)) {
-                    Sauce.updateOne({ _id: userId }, { 
+                    Sauce.updateOne({ _id: sauceId }, { 
                         $inc: { likes: 1 },
                         $inc: { dislikes: -1 },
                         $push: { usersLiked: userId },
@@ -113,7 +113,7 @@ exports.likeOneSauce = (req, res, next) => {
                         .then(() => res.status(200).json({ message: 'Vous avez liké cette sauce' }))
                         .catch(error => res.status(400).json({ error }));
                 } else {
-                    Sauce.updateOne({ _id: userId }, {
+                    Sauce.updateOne({ _id: sauceId }, {
                         $inc: { likes: 1 },
                         $push: { usersLiked: userId }
                     })
@@ -129,16 +129,6 @@ exports.likeOneSauce = (req, res, next) => {
 /* 
 userId / _id (sauce ID) / cliclike / {likes, dislikes, [usersLiked], [usersDislikes]}
 clicLike = -1 ou 0 ou 1
-Si j'aime (clicLike) = -1 : il avait déjà liké (appartient à [usersLiked]) => retire userId de [usersLiked], ajoute à [usersDisliked]
-                                            ou disliké (appartient à [usersDisliked]) => rien
-                                            ou rien (appartient à aucun) => ajoute à [userDisliked] et dislikes ++
-Si j'aime (clicLike) = 0 : il avait déjà liké (appartient à [usersLiked]) => retire userId de [usersLiked]
-                                            ou disliké (appartient à [usersDisliked]) => retire userId de [userDisliked]
-                                            ou rien (appartient à aucun) => rien
-Si j'aime (clicLike) = 1 : il avait déjà liké (appartient à [usersLiked]) => rien
-                                            ou disliké (appartient à [usersDisliked]) => retire userID de [usersDisliked] et ajoute à [usersLiked]
-                                            ou rien (appartient à aucun) => ajoute à [userLiked]
-
 
 likes = [usersLiked].length && dislikes = [usersDisliked].length
 $size : Selects documents if the array field is a specified size.
