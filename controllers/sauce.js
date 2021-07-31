@@ -124,12 +124,7 @@ exports.likeOneSauce = (req, res, next) => {
             .catch(error => res.status(404).json({ error }));
     }
 }
-//Définit le statut "j'aime" pour userID fourni. Si j'aime = 1, l'utilisateur aime la sauce. Si j'aime = 0, l'utilisateur annule ce qu'il aime ou ce qu'il n'aime pas. Si j'aime = -1, l'utilisateur n'aime pas la sauce. L'identifiant de l'utilisateur doit être ajouté ou supprimé du tableau approprié, en gardant une trace de ses préférences et en l'empêchant d'aimer ou de ne pas aimer la même sauce plusieurs fois. Nombre total de "j'aime" et de "je n'aime pas" à mettre à jour avec chaque "j'aime".
-
-/* 
-userId / _id (sauce ID) / cliclike / {likes, dislikes, [usersLiked], [usersDislikes]}
-clicLike = -1 ou 0 ou 1
-
+/*
 likes = [usersLiked].length && dislikes = [usersDisliked].length
 $size : Selects documents if the array field is a specified size.
 $in : Matches any of the values specified in an array.
