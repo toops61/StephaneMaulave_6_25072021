@@ -55,6 +55,46 @@ exports.likeOneSauce = (req, res, next) => {
     let sauceId = req.params.id;
     let userId = req.body.userId;
     if (clicLike === -1) {
+        Sauce.updateOne({ _id: sauceId }, { 
+            $inc: { dislikes: 1 },
+            $push: { usersDisliked: userId }
+        })
+            .then(() => res.status(200).json({ message: 'Vous n\'aimez pas cette sauce' }))
+            .catch(error => res.status(400).json({ error }));
+    } else if (clicLike === 1) {
+        Sauce.updateOne({ _id: sauceId }, {
+            $inc: { likes: 1 },
+            $push: { usersLiked: userId }
+        })
+            .then(() => res.status(200).json({ message: 'Vous avez liké cette sauce' }))
+            .catch(error => res.status(400).json({ error }));   
+    } else {
+        Sauce.findOne({ _id: sauceId })
+            .then(sauce => {
+                if (sauce.usersLiked.includes(userId)) {
+                    Sauce.updateOne({ _id: sauceId }, { 
+                        $inc: { likes: -1 },
+                        $pull: { usersLiked: userId }
+                    })
+                        .then(() => res.status(200).json({ message: 'Vous avez annulé votre choix' }))
+                        .catch(error => res.status(400).json({ error }));
+                } else {
+                    Sauce.updateOne({ _id: sauceId }, { 
+                        $inc: { dislikes: -1 },
+                        $pull: { usersDisliked: userId }
+                    })
+                        .then(() => res.status(200).json({ message: 'Vous avez annulé votre choix' }))
+                        .catch(error => res.status(400).json({ error }));
+                }
+            })
+            .catch(error => res.status(404).json({ error }));
+    } 
+}
+/* exports.likeOneSauce = (req, res, next) => {
+    let clicLike = req.body.like;
+    let sauceId = req.params.id;
+    let userId = req.body.userId;
+    if (clicLike === -1) {
         Sauce.findOne({ _id: sauceId })
             .then(sauce => {
                 if (sauce.usersLiked.includes(userId)) {
@@ -123,17 +163,11 @@ exports.likeOneSauce = (req, res, next) => {
             })
             .catch(error => res.status(404).json({ error }));
     }
-}
+} */
 /*
 likes = [usersLiked].length && dislikes = [usersDisliked].length
-$size : Selects documents if the array field is a specified size.
 $in : Matches any of the values specified in an array.
 $nin : Matches none of the values specified in an array.
 $ : Projects the first element in an array that matches the query condition
 $eq : Matches values that are equal to a specified value.
-
-Logique version 2 :
-chaque clic = mise à jour !
-
-
 */
