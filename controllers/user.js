@@ -1,9 +1,13 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-
-//const token = require('crypto').randomBytes(64).toString('hex');
+const dotenv = require('dotenv');
+const fs = require('fs');
+//const { writeFile } = require('fs');
+const token = require('crypto').randomBytes(64).toString('hex');
 
 const User = require('../models/user');
+
+dotenv.config();
 
 exports.signup = (req, res, next) => {
     bcrypt.hash(req.body.password, 10)
@@ -31,12 +35,16 @@ exports.login = (req, res, next) => {
             if (!valid) {
               return res.status(401).json({ error: 'Mot de passe incorrect !' });
             }
+            fs.writeFile('.env', 'TOKEN_SECRET='+token, function (err) {
+              if (err) return console.log(erreur);
+              console.log('token created and stored');
+            });
             res.status(200).json({
               userId: user._id,
               token: jwt.sign(
                   { userId: user._id },
-                  'RANDOM_TOKEN_SECRET',
-                  { expiresIn: '24h' }
+                  process.env.TOKEN_SECRET,
+                  { expiresIn: '2h' }
               )
             });
           })
