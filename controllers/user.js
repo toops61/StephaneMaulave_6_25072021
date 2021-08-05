@@ -2,8 +2,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 const fs = require('fs');
-//const { writeFile } = require('fs');
-const token = require('crypto').randomBytes(64).toString('hex');
+const crypto = require('crypto');
 
 const User = require('../models/user');
 
@@ -13,7 +12,6 @@ exports.signup = (req, res, next) => {
     bcrypt.hash(req.body.password, 10)
       .then(hash => {
         const user = new User({
-          //chiffrer email
           email: req.body.email,
           password: hash
         });
@@ -35,6 +33,7 @@ exports.login = (req, res, next) => {
             if (!valid) {
               return res.status(401).json({ error: 'Mot de passe incorrect !' });
             }
+            const token = crypto.randomBytes(64).toString('hex');
             fs.writeFile('.env', 'TOKEN_SECRET='+token, function (err) {
               if (err) return console.log(erreur);
               console.log('token created and stored');
