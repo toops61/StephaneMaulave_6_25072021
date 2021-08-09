@@ -1,6 +1,5 @@
 const Sauce = require('../models/sauceModel');
 const fs = require('fs');
-//const { json } = require('body-parser');
 
 exports.createSauce = (req, res, next) => {
     const sauceObject = JSON.parse(req.body.sauce);
@@ -90,84 +89,3 @@ exports.likeOneSauce = (req, res, next) => {
             .catch(error => res.status(404).json({ error }));
     } 
 }
-/* exports.likeOneSauce = (req, res, next) => {
-    let clicLike = req.body.like;
-    let sauceId = req.params.id;
-    let userId = req.body.userId;
-    if (clicLike === -1) {
-        Sauce.findOne({ _id: sauceId })
-            .then(sauce => {
-                if (sauce.usersLiked.includes(userId)) {
-                    Sauce.updateOne({ _id: sauceId }, { 
-                        $inc: { dislikes: 1 },
-                        $inc: { likes: -1 },
-                        $push: { usersDisliked: userId },
-                        $pull: { usersLiked: userId }
-                    })
-                        .then(() => res.status(200).json({ message: 'Vous n\'aimez pas cette sauce' }))
-                        .catch(error => res.status(400).json({ error }));
-                } else if (sauce.usersDisliked.includes(userId)) {
-                    console.log('vous avez déjà disliké');
-                } else {
-                    Sauce.updateOne({ _id: sauceId }, { 
-                        $inc: { dislikes: 1 },
-                        $push: { usersDisliked: userId }
-                    })
-                        .then(() => res.status(200).json({ message: 'Vous n\'aimez pas cette sauce' }))
-                        .catch(error => res.status(400).json({ error }));
-                }
-            })
-            .catch(error => res.status(404).json({ error }));
-    } else if (clicLike === 0) {
-        Sauce.findOne({ _id: sauceId })
-            .then(sauce => {
-                if (sauce.usersLiked.includes(userId)) {
-                    Sauce.updateOne({ _id: sauceId }, { 
-                        $inc: { likes: -1 },
-                        $pull: { usersLiked: userId }
-                    })
-                        .then(() => res.status(200).json({ message: 'Sauce likée' }))
-                        .catch(error => res.status(400).json({ error }));
-                } else if (sauce.usersDisliked.includes(userId)) {
-                    Sauce.updateOne({ _id: sauceId }, { 
-                        $inc: { dislikes: -1 },
-                        $pull: { usersDisliked: userId }
-                    })
-                        .then(() => res.status(200).json({ message: 'Sauce likée' }))
-                        .catch(error => res.status(400).json({ error }));
-                }
-            })
-            .catch(error => res.status(404).json({ error }));
-    } else {
-        Sauce.findOne({ _id: sauceId })
-            .then(sauce => {
-                if (sauce.usersLiked.includes(userId)) {
-                    console.log('vous avez déjà liké cette sauce');
-                } else if (sauce.usersDisliked.includes(userId)) {
-                    Sauce.updateOne({ _id: sauceId }, { 
-                        $inc: { likes: 1 },
-                        $inc: { dislikes: -1 },
-                        $push: { usersLiked: userId },
-                        $pull: { usersDisliked: userId }
-                    })
-                        .then(() => res.status(200).json({ message: 'Vous avez liké cette sauce' }))
-                        .catch(error => res.status(400).json({ error }));
-                } else {
-                    Sauce.updateOne({ _id: sauceId }, {
-                        $inc: { likes: 1 },
-                        $push: { usersLiked: userId }
-                    })
-                        .then(() => res.status(200).json({ message: 'Vous avez liké cette sauce' }))
-                        .catch(error => res.status(400).json({ error }));
-                }
-            })
-            .catch(error => res.status(404).json({ error }));
-    }
-} */
-/*
-likes = [usersLiked].length && dislikes = [usersDisliked].length
-$in : Matches any of the values specified in an array.
-$nin : Matches none of the values specified in an array.
-$ : Projects the first element in an array that matches the query condition
-$eq : Matches values that are equal to a specified value.
-*/

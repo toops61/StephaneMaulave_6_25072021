@@ -1,8 +1,12 @@
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
-//const uri = 'mongodb+srv://toops61:V4dJrG8zGgg@cluster0.9fdzy.mongodb.net/Projet6?retryWrites=true&w=majority';
-const uri = 'mongodb+srv://invite:OAQttPDM4gj0VsRy@cluster0.9fdzy.mongodb.net/Projet6?retryWrites=true&w=majority';
+const dotenv = require('dotenv');
+
+dotenv.config();
+
+const password = process.env.PASSWORD;
+const uri = 'mongodb+srv://invite:' + password + '@cluster0.9fdzy.mongodb.net/Projet6?retryWrites=true&w=majority';
 const path = require('path');
 
 const sauceRoutes = require('./routes/sauce');

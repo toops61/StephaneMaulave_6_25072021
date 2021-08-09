@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 const fs = require('fs');
 const crypto = require('crypto');
-const token = crypto.randomBytes(64).toString('hex');
+//const token = crypto.randomBytes(64).toString('hex');
 
 const User = require('../models/user');
 
@@ -34,9 +34,6 @@ exports.login = (req, res, next) => {
             if (!valid) {
               return res.status(401).json({ error: 'Mot de passe incorrect !' });
             }
-            fs.writeFile('.env', 'TOKEN_SECRET='+token, function (err) {
-              if (err) return console.log(erreur);
-            });
             res.status(200).json({
               userId: user._id,
               token: jwt.sign(
