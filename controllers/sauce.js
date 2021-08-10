@@ -1,7 +1,7 @@
 const Sauce = require('../models/sauceModel');
 const fs = require('fs');
 
-exports.createSauce = (req, res, next) => {
+exports.createSauce = (req, res) => {
     const sauceObject = JSON.parse(req.body.sauce);
     delete sauceObject._id;
     const sauce = new Sauce({
@@ -13,7 +13,7 @@ exports.createSauce = (req, res, next) => {
       .catch(error => res.status(400).json({ error }));
 };
 
-exports.modifySauce = (req, res, next) => {
+exports.modifySauce = (req, res) => {
     const sauceObject = req.file ?
         {
             ...JSON.parse(req.body.sauce),
@@ -24,7 +24,7 @@ exports.modifySauce = (req, res, next) => {
         .catch(error => res.status(400).json({ error }));
 };
 
-exports.deleteSauce = (req, res, next) => {
+exports.deleteSauce = (req, res) => {
     Sauce.findOne({ _id: req.params.id})
         .then(sauce => {
             const filename = sauce.imageUrl.split('/images/')[1];
@@ -37,19 +37,19 @@ exports.deleteSauce = (req, res, next) => {
         .catch(error => res.status(500).json({ error }));
   };
 
-exports.getOneSauce = (req, res, next) => {
+exports.getOneSauce = (req, res) => {
 Sauce.findOne({ _id: req.params.id })
     .then(sauce => res.status(200).json(sauce))
     .catch(error => res.status(404).json({ error }));
 };
 
-exports.getAllSauces = (req, res, next) => {
+exports.getAllSauces = (req, res) => {
     Sauce.find()
       .then(sauces => res.status(200).json(sauces))
       .catch(error => res.status(400).json({ error }));
 };
 
-exports.likeOneSauce = (req, res, next) => {
+exports.likeOneSauce = (req, res) => {
     let clicLike = req.body.like;
     let sauceId = req.params.id;
     let userId = req.body.userId;

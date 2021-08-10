@@ -1,15 +1,12 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
-const fs = require('fs');
-const crypto = require('crypto');
-//const token = crypto.randomBytes(64).toString('hex');
 
 const User = require('../models/user');
 
 dotenv.config();
 
-exports.signup = (req, res, next) => {
+exports.signup = (req, res) => {
     bcrypt.hash(req.body.password, 10)
       .then(hash => {
         const user = new User({
@@ -23,7 +20,7 @@ exports.signup = (req, res, next) => {
       .catch(error => res.status(500).json({ error }));
 };
 
-exports.login = (req, res, next) => {
+exports.login = (req, res) => {
     User.findOne({ email: req.body.email })
       .then(user => {
         if (!user) {
