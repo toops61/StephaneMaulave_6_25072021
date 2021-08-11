@@ -5,8 +5,7 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-const password = process.env.PASSWORD;
-const uri = 'mongodb+srv://invite:' + password + '@cluster0.9fdzy.mongodb.net/Projet6?retryWrites=true&w=majority';
+const uri = process.env.URI;
 const path = require('path');
 
 const sauceRoutes = require('./routes/sauce');
