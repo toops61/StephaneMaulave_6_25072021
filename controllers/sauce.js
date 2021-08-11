@@ -9,27 +9,39 @@ exports.createSauce = (req, res) => {
       imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     });
     sauce.save()
-      .then(() => res.status(201).json({ message: 'Sauce enregistrée !'}))
+      .then(() => res.status(201).json({ message: 'Nouvelle sauce créée !'}))
       .catch(error => res.status(400).json({ error }));
 };
 
 exports.modifySauce = (req, res) => {
-    const sauceObject = req.file ?
-        {
+    const sauceId = req.params.id;
+    if (req.file) {
+        Sauce.findOne({ _id: sauceId})
+        .then(sauce => {
+            const filename = sauce.imageUrl.split('/images/')[1];
+            fs.unlink(`images/${filename}`, (err) => {
+                if (err) throw err;
+            });
+        })
+        .catch(error => res.status(500).json({ error }));
+        var sauceObject = {
             ...JSON.parse(req.body.sauce),
-            imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-        } : { ...req.body };
-    Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
+            imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`};
+    } else {
+        var sauceObject = { ...req.body };
+    };
+    Sauce.updateOne({ _id: sauceId }, { ...sauceObject, _id: sauceId })
         .then(() => res.status(200).json({ message: 'Sauce modifiée !'}))
         .catch(error => res.status(400).json({ error }));
 };
 
 exports.deleteSauce = (req, res) => {
-    Sauce.findOne({ _id: req.params.id})
+    const sauceId = req.params.id;
+    Sauce.findOne({ _id: sauceId})
         .then(sauce => {
             const filename = sauce.imageUrl.split('/images/')[1];
             fs.unlink(`images/${filename}`, () => {
-                Sauce.deleteOne({ _id: req.params.id })
+                Sauce.deleteOne({ _id: sauceId })
                 .then(() => res.status(200).json({ message: 'Sauce supprimée !'}))
                 .catch(error => res.status(400).json({ error }));
             })
