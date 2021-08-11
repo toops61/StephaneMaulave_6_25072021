@@ -1,19 +1,18 @@
 ## Piquante
 
 installer :
-- [NodeJS](https://nodejs.org/en/download/) en version 12.14 ou 14.0
-- [Angular CLI](https://github.com/angular/angular-cli) : npm install -g @angular/cli
-- [node-sass](https://www.npmjs.com/package/node-sass) : attention à prendre la version correspondante à NodeJS. Pour Node 14.0 par exemple, installer node-sass en version 4.14+.
+- [NodeJS](https://nodejs.org/en/download/)
+- [Angular CLI](https://github.com/angular/angular-cli) : npm install -g @angular/cli (attention le projet ne fonctionne pas sur les versions de Angular > 8)
 
-télécharger le fichier .env dans le dossier du projet, il contient les éléments de sécurité pour la connexion, absents de ce repository.
+télécharger et dézipper le fichier Maulave_Stephane_P6_env.zip dans le dossier du projet, vous obtenez le fichier .env qui contient les éléments de sécurité pour la connexion, absents de ce repository. Attention ce fichier est caché sur l'explorateur (MacOS, Windows) mais visible sur VSCode ou en affichant les fichiers cachés.
 
-npm install
+lancer npm install
 
 Sur Windows, ces installations nécessitent d'utiliser PowerShell en tant qu'administrateur.
 
 ## Development server
 
 Démarrer ng serve pour avoir accès au serveur de développement.
-démarrer nodemon server sur un autre terminal
+démarrer nodemon server sur un autre terminal (pour l'installer : npm install -g nodemon) sinon node server.
 
 Rendez-vous sur http://localhost:4200/. L'application va se recharger automatiquement si vous modifiez un fichier source.

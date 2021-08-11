@@ -77,7 +77,7 @@ exports.likeOneSauce = (req, res) => {
             $inc: { likes: 1 },
             $push: { usersLiked: userId }
         })
-            .then(() => res.status(200).json({ message: 'Vous avez liké cette sauce' }))
+            .then(() => res.status(200).json({ message: 'Vous aimez cette sauce' }))
             .catch(error => res.status(400).json({ error }));   
     } else {
         Sauce.findOne({ _id: sauceId })
