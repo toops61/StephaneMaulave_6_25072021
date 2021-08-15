@@ -90,7 +90,7 @@ exports.likeOneSauce = (req, res) => {
                         .then(() => res.status(200).json({ message: 'Vous avez annulé votre choix' }))
                         .catch(error => res.status(400).json({ error }));
                 } else {
-                    Sauce.updateOne({ _id: sauceId }, { 
+                    Sauce.updateOne({ _id: sauceId }, {
                         $inc: { dislikes: -1 },
                         $pull: { usersDisliked: userId }
                     })
